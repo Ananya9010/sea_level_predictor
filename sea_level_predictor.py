@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from scipy.stats import linregress
 
 def draw_plot():
+    plt.clf() #clears previous figures
     # Read data from file
     df = pd.read_csv("epa-sea-level.csv")
 

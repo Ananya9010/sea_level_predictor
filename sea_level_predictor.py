@@ -27,4 +27,6 @@ def draw_plot():
 
     # Save plot and return data for testing (DO NOT MODIFY)
     plt.savefig('sea_level_plot.png')
+    plt.show()
+
     return plt.gca()

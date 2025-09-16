@@ -2,32 +2,41 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from scipy.stats import linregress
 
-def draw_plot():
-    plt.clf() #clears previous figures
-    # Read data from file
+def draw_plot(show_plot=False):
+   
+    
+    # Clear any previous plots
+    plt.clf()
+
+    # Read data
     df = pd.read_csv("epa-sea-level.csv")
 
-    # Create scatter plot
+    # Scatter plot of historical data
     plt.scatter(df['Year'], df['CSIRO Adjusted Sea Level'])
 
-    # Create first line of best fit (all data)
-    slope, intercept, r_value, p_value, std_err = linregress(df['Year'], df['CSIRO Adjusted Sea Level'])
-    years = list(range(df['Year'].min(), 2051))
-    plt.plot(years, [(slope*x + intercept) for x in years], 'r')
+    # First line of best fit (all data)
+    slope, intercept, *_ = linregress(df['Year'], df['CSIRO Adjusted Sea Level'])
+    years_all = list(range(df['Year'].min(), 2051))
+    plt.plot(years_all, [(slope*x + intercept) for x in years_all], 'r', label='Fit: All data')
 
-    # Create second line of best fit (year >= 2000)
+    # Second line of best fit (year >= 2000)
     df_recent = df[df['Year'] >= 2000]
     slope2, intercept2, *_ = linregress(df_recent['Year'], df_recent['CSIRO Adjusted Sea Level'])
     years_recent = list(range(2000, 2051))
-    plt.plot(years_recent, [(slope2*x + intercept2) for x in years_recent], 'g')
+    plt.plot(years_recent, [(slope2*x + intercept2) for x in years_recent], 'g', label='Fit: 2000 onwards')
 
-    # Add labels and title
+    # Labels and title
     plt.xlabel("Year")
     plt.ylabel("Sea Level (inches)")
     plt.title("Rise in Sea Level")
+    plt.legend()
 
-    # Save plot and return data for testing (DO NOT MODIFY)
+    # Save plot
     plt.savefig('sea_level_plot.png')
-    plt.show()
 
+    # Show plot only if requested
+    if show_plot:
+        plt.show()
+
+    # Return axes object for testing
     return plt.gca()
